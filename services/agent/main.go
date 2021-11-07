@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/json"
 	"io"
 	"io/ioutil"
 	"os"
@@ -10,31 +9,11 @@ import (
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
+	"github.com/silviopilato/gbk8s/pkg/tasks"
 )
 
 func main() {
 	cli := getClient()
-	task := readTask()
-
-	imageName := task.Properties.Image
-	containerName := task.Properties.ContainerName
-	pullImage(cli, imageName)
-	containerCreate(cli, imageName, containerName)
-	containerStart(cli, containerName)
-}
-
-type Task struct {
-    Task string `json:"task"`
-    Properties TaskProperties `json:"properties"`
-}
-
-type TaskProperties struct {
-	Image string `json:"image"`
-	ContainerName string `json:"containerName"`
-}
-
-func readTask() Task {
-	var task Task
 	jsonFile, err := os.Open("./services/agent/tests/redis.json")
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
@@ -42,12 +21,13 @@ func readTask() Task {
 		panic(err)
 	}
 	defer jsonFile.Close()
+	task := tasks.ReadTaskFromJSON(byteValue)
 
-	err = json.Unmarshal(byteValue, &task)
-	if err != nil {
-		panic(err)
-	}
-	return task
+	imageName := task.Properties.Image
+	containerName := task.Properties.ContainerName
+	pullImage(cli, imageName)
+	containerCreate(cli, imageName, containerName)
+	containerStart(cli, containerName)
 }
 
 func containerStart(cli *client.Client, containerName string) {
