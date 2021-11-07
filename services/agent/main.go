@@ -72,7 +72,7 @@ func pullImage(cli *client.Client, imageName string) {
 }
 
 func getClient() *client.Client {
-	cli, err := client.NewEnvClient();
+	cli, err := client.NewClientWithOpts(client.FromEnv);
 	if err != nil {
 		panic(err)
 	}
