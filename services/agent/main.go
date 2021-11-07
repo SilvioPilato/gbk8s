@@ -3,31 +3,47 @@ package main
 import (
 	"context"
 	"io"
-	"io/ioutil"
+	"log"
 	"os"
+	"os/signal"
 
 	"github.com/docker/docker/api/types"
 	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
+	"github.com/nats-io/nats.go"
 	"github.com/silviopilato/gbk8s/pkg/tasks"
 )
 
 func main() {
 	cli := getClient()
-	jsonFile, err := os.Open("./pkg/tasks/tests/mocks/redis.json")
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
+	nc, err := nats.Connect(nats.DefaultURL)
 	if err != nil {
 		panic(err)
 	}
-	defer jsonFile.Close()
-	task := tasks.ReadTaskFromJSON(byteValue)
+	log.Printf("Agent started")
+	nc.QueueSubscribe("tasks", "agent", func(msg *nats.Msg) {
+		task := tasks.ReadTaskFromJSON(msg.Data)
+		imageName := task.Properties.Image
+		containerName := task.Properties.ContainerName
 
-	imageName := task.Properties.Image
-	containerName := task.Properties.ContainerName
-	pullImage(cli, imageName)
-	containerCreate(cli, imageName, containerName)
-	containerStart(cli, containerName)
+		log.Printf("Pulling image...")
+		pullImage(cli, imageName)
+
+		log.Printf("Creating container...")
+		containerCreate(cli, imageName, containerName)
+
+		log.Printf("Starting container...")
+		containerStart(cli, containerName)
+
+		log.Printf("Everything set up!")
+	})
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, os.Interrupt)
+	<-c
+	log.Println()
+	log.Printf("Draining...")
+	nc.Drain()
+	log.Fatalf("Exiting")
 }
 
 func containerStart(cli *client.Client, containerName string) {
