@@ -1,3 +1,1 @@
 {"task":"START_WORKLOAD","properties":{"image":"docker.io/library/redis","containerName":"test-redis"}}
-
-go run nats-pub/main.go tasks {\"task\":\"START_WORKLOAD\",\"properties\":{\"image\":\"docker.io\/library\/redis\",\"containerName\":\"test-redis\"}}
