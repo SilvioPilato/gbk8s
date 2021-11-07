@@ -2,6 +2,6 @@
     "task": "START_WORKLOAD",
     "properties": {
         "image": "docker.io/library/redis",
-        "containerName": "super-redis"
+        "containerName": "test-redis"
     }
 }

@@ -14,7 +14,7 @@ import (
 
 func main() {
 	cli := getClient()
-	jsonFile, err := os.Open("./services/agent/tests/redis.json")
+	jsonFile, err := os.Open("./pkg/tasks/tests/mocks/redis.json")
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 
 	if err != nil {
