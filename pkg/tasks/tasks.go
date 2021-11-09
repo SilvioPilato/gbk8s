@@ -23,3 +23,19 @@ func ReadTaskFromJSON(data[] byte) Task {
 	}
 	return task
 }
+
+func SerializeTask(task *Task) []byte {
+	data, err := json.Marshal(task)
+	if err != nil {
+		panic(err)
+	}
+	return data
+}
+
+func GetStartWorkloadTask(properties TaskProperties) Task {
+	return Task{Task: "START_WORKLOAD", Properties: properties}
+}
+
+func GetRemoveWorkloadTask(properties TaskProperties) Task {
+	return Task{Task: "REMOVE_WORKLOAD", Properties: properties}
+}
