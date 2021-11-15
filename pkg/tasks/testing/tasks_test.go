@@ -21,10 +21,6 @@ func TestReadTaskFromJSON(t *testing.T) {
 		t.Fatalf("Invalid image name")
 	}
 
-	if (task.Task != "START_WORKLOAD") {
-		t.Fatalf("Invalid task name")
-	}
-
 	if (task.Properties.ContainerName != "test-redis") {
 		t.Fatalf("Invalid container name")
 	}
@@ -32,16 +28,12 @@ func TestReadTaskFromJSON(t *testing.T) {
 
 func TestSerializeTask(t *testing.T) {
 	properties := tasks.TaskProperties{Image: "docker.io/library/redis", ContainerName: "test-redis"}
-	task := tasks.Task{Task: "START_WORKLOAD", Properties: properties}
+	task := tasks.Task{Properties: properties}
 	serialized := tasks.SerializeTask(&task)
 	deserialized := tasks.ReadTaskFromJSON(serialized)
 
 	if (deserialized.Properties.Image != "docker.io/library/redis") {
 		t.Fatalf("Invalid image name")
-	}
-
-	if (deserialized.Task != "START_WORKLOAD") {
-		t.Fatalf("Invalid task name")
 	}
 
 	if (deserialized.Properties.ContainerName != "test-redis") {

@@ -106,7 +106,7 @@ func handleRemoveWorkload(msg *nats.Msg) {
 	err= containerRemove(containerName)
 	if err != nil {
 		log.Println(err)
-	} else {
-		log.Printf("Container removed successfully!")
-	}
+		return
+	} 
+	log.Printf("Container removed successfully!")
 }

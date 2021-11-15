@@ -5,7 +5,6 @@ import (
 )
 
 type Task struct {
-    Task string `json:"task"`
     Properties TaskProperties `json:"properties"`
 }
 
@@ -33,9 +32,9 @@ func SerializeTask(task *Task) []byte {
 }
 
 func GetStartWorkloadTask(properties TaskProperties) Task {
-	return Task{Task: "START_WORKLOAD", Properties: properties}
+	return Task{Properties: properties}
 }
 
 func GetRemoveWorkloadTask(properties TaskProperties) Task {
-	return Task{Task: "REMOVE_WORKLOAD", Properties: properties}
+	return Task{Properties: properties}
 }
