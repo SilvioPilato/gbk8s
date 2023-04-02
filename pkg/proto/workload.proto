@@ -1,0 +1,18 @@
+syntax = "proto3";
+package workload;
+
+option go_package = "github.com/silviopilato/gbk8s/pkg/proto/workload";
+
+message Workload {
+    string Image = 1;
+    string Name = 2;
+}
+
+message WorkloadResponse {
+    string Status = 1;
+}
+
+service AgentService {
+    rpc StartWorkload(Workload) returns (WorkloadResponse) {}
+    rpc RemoveWorkload(Workload) returns (WorkloadResponse) {}
+}
