@@ -30,6 +30,7 @@ func (a AgentService) StartWorkload(ctx context.Context, wload *workload.Workloa
 	err = a.containerCreate(imageName, containerName)
 	if err != nil {
 		log.Println(err)
+		return &workload.WorkloadResponse{Status: "Failed"}, err
 	}
 	log.Printf("Starting container...")
 	err = a.containerStart(containerName)

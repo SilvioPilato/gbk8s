@@ -1,60 +1,27 @@
 package main
 
 import (
-	"net/http"
+	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nats-io/nats.go"
-	"github.com/silviopilato/gbk8s/pkg/tasks"
+	workload "github.com/silviopilato/gbk8s/pkg/proto"
+	"google.golang.org/grpc"
 )
 
 type POSTBody struct {
 	Image string `json:"image" binding:"required"`
-	Name string `json:"name" binding:"required"`
+	Name  string `json:"name" binding:"required"`
 }
 
-var nc *nats.Conn
 func main() {
+	opts := grpc.WithInsecure()
 	router := gin.Default()
-	var err error
-	nc, err = nats.Connect(nats.DefaultURL)
+	conn, err := grpc.Dial(":36666", opts)
 	if err != nil {
-		panic(err)
+		log.Fatalf("Error Dialing GRPC agent: %v", err)
 	}
-	router.POST("/", PostHandler)
-	router.DELETE("/:name", DeleteHandler)
+	agentClient := AgentClient{rpcClient: workload.NewAgentServiceClient(conn)}
+	router.POST("/", agentClient.StartWorkload)
+	router.DELETE("/:name", agentClient.RemoveWorkload)
 	router.Run()
-}
-
-func PostHandler(ctx *gin.Context) {
-	var reqBody POSTBody
-	err := ctx.BindJSON(&reqBody)
-	
-	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-	}
-	properties := tasks.TaskProperties{Image: reqBody.Image, ContainerName: reqBody.Name}
-	workload := tasks.GetStartWorkloadTask(properties)
-	serialized := tasks.SerializeTask(&workload)
-	err = nc.Publish("start_workload", serialized)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	}
-	ctx.JSON(200, gin.H{
-		"submitted": true,
-	})
-}
-
-func DeleteHandler(ctx *gin.Context) {
-	name := ctx.Param("name")
-	properties := tasks.TaskProperties{ContainerName: name}
-	workload := tasks.GetRemoveWorkloadTask(properties)
-	serialized := tasks.SerializeTask(&workload)
-	err := nc.Publish("delete_workload", serialized)
-	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-	}
-	ctx.JSON(200, gin.H{
-		"submitted": true,
-	})
 }

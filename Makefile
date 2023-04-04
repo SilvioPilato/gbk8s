@@ -4,3 +4,5 @@ proto:
 run-agent:
 	go run services/agent/*
 
+run-apiserver:
+	PORT=8080 go run services/apiserver/*

@@ -5,15 +5,15 @@ import (
 )
 
 type Task struct {
-    Properties TaskProperties `json:"properties"`
+	Properties TaskProperties `json:"properties"`
 }
 
 type TaskProperties struct {
 	Image string `json:"image"`
-	ContainerName string `json:"containerName"`
+	Name  string `json:"containerName"`
 }
 
-func ReadTaskFromJSON(data[] byte) Task {
+func ReadTaskFromJSON(data []byte) Task {
 	var task Task
 
 	err := json.Unmarshal(data, &task)
