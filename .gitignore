@@ -1,1 +1,3 @@
 *.pb.*
+consul-data
+tmp
