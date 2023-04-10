@@ -1,11 +1,23 @@
 syntax = "proto3";
-package workload;
+package proto;
 
-option go_package = "github.com/silviopilato/gbk8s/pkg/proto/workload";
+option go_package = "github.com/silviopilato/gbk8s/pkg/proto";
 
 message Workload {
     string Image = 1;
     string Name = 2;
+    repeated Portbinding PortBindings = 3;
+}
+
+message Portbinding {
+    uint32 inner = 1;
+    uint32 outer = 2;
+    PortProtocol protocol = 3;
+}
+
+enum PortProtocol {
+    TCP = 0;
+    UDP = 1;
 }
 
 message WorkloadResponse {
