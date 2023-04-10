@@ -6,3 +6,6 @@ run-agent:
 
 run-apiserver:
 	PORT=8080 go run services/apiserver/*
+
+run-consul-dev:
+	consul agent -server -dev -bind=127.0.0.1 -ui -data-dir=consul-data/
