@@ -154,6 +154,7 @@ require (
 	github.com/ryanuber/go-glob v1.0.0 // indirect
 	github.com/sean-/seed v0.0.0-20170313163322-e2103e2c3529 // indirect
 	github.com/segmentio/fasthash v1.0.3 // indirect
+	github.com/silviopilato/gbk8s/pkg/config v0.0.0-00010101000000-000000000000
 	github.com/sirupsen/logrus v1.8.1 // indirect
 	github.com/skratchdot/open-golang v0.0.0-20200116055534-eef842397966 // indirect
 	github.com/stretchr/objx v0.5.0 // indirect
@@ -191,3 +192,5 @@ require (
 )
 
 replace github.com/silviopilato/gbk8s/pkg/proto => ./pkg/proto
+
+replace github.com/silviopilato/gbk8s/pkg/config => ./pkg/config
