@@ -26,7 +26,6 @@ type PortBinding struct {
 func main() {
 	args := os.Args[1:]
 	configPath := args[0]
-
 	cfg := config.Config{}
 	err := config.ReadYamlConfig(&cfg, configPath)
 
