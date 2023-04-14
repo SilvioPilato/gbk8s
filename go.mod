@@ -6,7 +6,7 @@ require (
 	github.com/docker/docker v20.10.10+incompatible
 	github.com/gin-gonic/gin v1.7.4
 	github.com/hashicorp/consul v1.15.2
-	github.com/silviopilato/gbk8s/pkg/proto v0.0.0-00010101000000-000000000000
+	github.com/silviopilato/gbk8s/pkg/proto v0.0.0-20230410165828-84c3ca65fcab
 	google.golang.org/grpc v1.54.0
 )
 

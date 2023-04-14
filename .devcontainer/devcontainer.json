@@ -7,10 +7,11 @@
 	"features": {
 		"ghcr.io/devcontainers/features/node:1": {},
 		"ghcr.io/devcontainers/features/docker-in-docker:2": {},
-		"ghcr.io/devcontainers-contrib/features/consul-asdf:2": {}
+		"ghcr.io/devcontainers-contrib/features/consul-asdf:2": {},
+		"ghcr.io/devcontainers-contrib/features/protoc-asdf:1": {}
 	},
 
-	"postCreateCommand": "go install github.com/cosmtrek/air@latest",
+	"postCreateCommand": "make prepare-dev",
 	"portsAttributes": {
 		"8500": {
 			"label": "Consul UI"
