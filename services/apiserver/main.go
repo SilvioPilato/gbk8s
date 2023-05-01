@@ -42,9 +42,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error Dialing GRPC agent: %v", err)
 	}
-	if err != nil {
-		log.Fatalf("Error Dialing GRPC agent: %v", err)
-	}
+	
 	agentClient := AgentClient{rpcClient: proto.NewAgentServiceClient(conn)}
 	router.POST("/", agentClient.StartWorkload)
 	router.DELETE("/:name", agentClient.RemoveWorkload)
